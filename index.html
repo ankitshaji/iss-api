@@ -2,22 +2,49 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Where the iss at</title>
+    <title>International Space Station Locator</title>
     <link rel="stylesheet" href="/src/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+      integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+      crossorigin=""
+    ></script>
+    <style>
+      #issMap {
+        height: 500px;
+      }
+      body {
+        background-color: pink;
+      }
+    </style>
   </head>
   <body>
-    <h1>Where the iss at</h1>
+    <h1>International Space Station Locator</h1>
     <p>
       latitude:<span id="lat"></span><br />
       longitude:<span id="lon"></span>
     </p>
+    <div id="issMap"></div>
     <script>
+      const map = L.map("issMap").setView([0, 0], 1);
+      const marker = L.marker([0, 0]).addTo(map);
+      const attribution =
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> Contributors';
+      const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+      const tiles = L.tileLayer(tileUrl, { attribution }).addTo(map);
       const iss_api_ulr = "https://api.wheretheiss.at/v1/satellites/25544";
       async function getISS() {
         const response = await fetch(iss_api_ulr);
         const data = await response.json();
         //destructure variable
         const { latitude, longitude } = data;
+        marker.setLatLng([latitude, longitude]);
         document.getElementById("lat").textContent = latitude;
         document.getElementById("lon").textContent = longitude;
       }
