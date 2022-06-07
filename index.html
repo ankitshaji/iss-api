@@ -32,12 +32,21 @@
     </p>
     <div id="issMap"></div>
     <script>
+      //map+tiles creation
       const map = L.map("issMap").setView([0, 0], 1);
-      const marker = L.marker([0, 0]).addTo(map);
       const attribution =
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> Contributors';
       const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
       const tiles = L.tileLayer(tileUrl, { attribution }).addTo(map);
+
+      //icon creation
+      const issIcon = L.icon({
+        iconUrl: "issImage.png",
+        iconSize: [50, 32],
+        iconAnchor: [25, 16],
+      });
+      const marker = L.marker([0, 0], { icon: issIcon }).addTo(map);
+
       const iss_api_ulr = "https://api.wheretheiss.at/v1/satellites/25544";
       async function getISS() {
         const response = await fetch(iss_api_ulr);
